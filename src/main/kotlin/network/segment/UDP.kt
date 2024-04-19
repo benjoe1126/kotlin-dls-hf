@@ -1,4 +1,4 @@
 package network.segment
 
-class UDP {
+class UDP(): Segment() {
 }

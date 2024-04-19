@@ -1,4 +1,4 @@
-package network
+package network.segment
 
-interface Segment {
+open abstract class Segment() {
 }
