@@ -1,10 +1,9 @@
 package network.packet
 
-import com.sun.tools.jdi.Packet
 import utils.pow
 import utils.toDottedDecimal
 
-class IP {
+class IPV4 {
     var address: String = ""
     var mask: UInt = 0u
     private var numericAddress = 0u
@@ -38,12 +37,16 @@ class IP {
     }
 }
 
-fun IP.validate(){
-    
+fun IPV4.validate(): Boolean{
+    return address.matches(Regex("^((25[0-5]|(2[0-4]|1\\d|[1-9]|)\\d)\\.?\\b){4}\$")) &&
+            mask >= 0u && mask <= 32u
 }
 
-fun ip(init: IP.() -> Unit): IP{
-    val ipaddr = IP()
+fun ipv4(init: IPV4.() -> Unit): IPV4{
+    val ipaddr = IPV4()
     ipaddr.init()
+    if(!ipaddr.validate()){
+        throw IllegalArgumentException("Invalid IPV4 address and/or netmask provided, ip: ${ipaddr.address}, netmask: ${ipaddr.mask}")
+    }
     return ipaddr
 }
