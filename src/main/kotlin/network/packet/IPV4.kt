@@ -3,10 +3,10 @@ package network.packet
 import utils.pow
 import utils.toDottedDecimal
 
-class IPV4 {
+class IPV4: IP {
     var address: String = ""
     var mask: UInt = 0u
-    private var numericAddress = 0u
+    var numericAddress = 0u
         get(){
             if(field == 0u){
                 field = address.split(".")
@@ -17,14 +17,14 @@ class IPV4 {
             }
             return field
         }
-    private var maskNumeric: UInt? = null
+    var maskNumeric: UInt? = null
         get(){
             if(field == null){
                 field = 2u.pow(mask) - 1u shl (32 - mask.toInt())
             }
             return field
         }
-    private val prefixNumeric: UInt
+    val prefixNumeric: UInt
         get(){
             return (numericAddress and
                     maskNumeric!!)
@@ -32,7 +32,7 @@ class IPV4 {
     override fun toString(): String {
         return String.format("%s/%d",address,mask.toInt())
     }
-    fun subnet(): String{
+    override fun subnet(): String{
         return prefixNumeric.toDottedDecimal()
     }
 }

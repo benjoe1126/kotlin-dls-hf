@@ -1,12 +1,27 @@
 package network.packet
 
-class Packet {
-    lateinit var srcIpv4: IPV4
-    lateinit var dstIpv4: IPV4
+import enums.EtherTypes
+import network.encap.L2
+import network.encap.L3
+
+class Packet: L2 {
+    lateinit var srcIp: IP
+    lateinit var dstIp: IP
+    private var segment: L3? = null
+    override fun getEtherType(): EtherTypes {
+        return when(srcIp){
+            is IPV4 -> EtherTypes.IPv4
+            is IPV6 -> EtherTypes.IPv6
+        }
+    }
+    fun checkIpMatching(): Boolean{
+        return srcIp.javaClass == dstIp.javaClass
+    }
 }
 
 fun packet(init: Packet.() -> Unit): Packet {
     val packet = Packet()
     packet.init()
+    if(!packet.checkIpMatching()) throw IllegalStateException("Src and dst ip addresses must be of same address family")
     return packet
 }
