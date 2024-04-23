@@ -6,40 +6,29 @@ import utils.toDottedDecimal
 class IPV4: IP {
     var address: String = ""
     var mask: UInt = 0u
-    var numericAddress = 0u
-        get(){
-            if(field == 0u){
-                field = address.split(".")
-                    .map{ it.toUInt() }
-                    .reduce {
-                            acc, octet -> (acc shl 8) + octet
-                    }
-            }
-            return field
-        }
-    var maskNumeric: UInt? = null
-        get(){
-            if(field == null){
-                field = 2u.pow(mask) - 1u shl (32 - mask.toInt())
-            }
-            return field
-        }
-    val prefixNumeric: UInt
-        get(){
-            return (numericAddress and
-                    maskNumeric!!)
-        }
+    private val numericAddress by lazy {
+        address.split(".")
+            .map{ it.toUInt() }
+            .reduce {
+                    acc, octet -> (acc shl 8) + octet }
+    }
+    private val maskNumeric by lazy{
+        2u.pow(mask) - 1u shl (32 - mask.toInt())
+    }
+    private val prefixNumeric by lazy{
+        numericAddress and maskNumeric!!
+    }
     override fun toString(): String {
         return String.format("%s/%d",address,mask.toInt())
     }
     override fun subnet(): String{
         return prefixNumeric.toDottedDecimal()
     }
-}
 
-fun IPV4.validate(): Boolean{
-    return address.matches(Regex("^((25[0-5]|(2[0-4]|1\\d|[1-9]|)\\d)\\.?\\b){4}\$")) &&
-            mask >= 0u && mask <= 32u
+    override fun validate(): Boolean {
+        return address.matches(Regex("^((25[0-5]|(2[0-4]|1\\d|[1-9]|)\\d)\\.?\\b){4}\$")) &&
+                mask >= 0u && mask <= 32u
+    }
 }
 
 fun ipv4(init: IPV4.() -> Unit): IPV4{

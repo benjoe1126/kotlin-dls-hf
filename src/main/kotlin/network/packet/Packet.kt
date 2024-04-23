@@ -1,9 +1,11 @@
 package network.packet
 
+import annotations.Encapsulation
 import enums.EtherTypes
 import network.encap.L2
 import network.encap.L3
 
+@Encapsulation
 class Packet: L2 {
     lateinit var srcIp: IP
     lateinit var dstIp: IP
@@ -14,6 +16,9 @@ class Packet: L2 {
             is IPV6 -> EtherTypes.IPv6
         }
     }
+
+    override fun getLength(): UInt = 24u
+
     fun checkIpMatching(): Boolean{
         return srcIp.javaClass == dstIp.javaClass
     }
