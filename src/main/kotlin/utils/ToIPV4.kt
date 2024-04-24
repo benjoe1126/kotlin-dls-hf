@@ -5,13 +5,19 @@ import network.packet.IPV4
 import network.packet.ipv4
 
 fun String.toIpV4(): IPV4 {
-    if (this.isEmpty() || !this.contains("/")) {
+    if (this.isEmpty()) {
         throw InvalidIPFormatException("Invalid IPv4 format provided, expected XX.XX.XX.XX/Y, got ${this}")
     }
-    val splt = this.split("/")
+    var addr = this
+    var msk = 32u
+    if(this.contains("/")){
+        val splt = this.split("/")
+        addr = splt[0]
+        msk = splt[1].toUInt()
+    }
     val ret = ipv4{
-        address = splt[0]
-        mask = splt[1].toUInt()
+        address = addr
+        mask = msk
     }
     if(!ret.validate()){
         throw InvalidIPFormatException("Invalid IPv4 provided, expected XX.XX.XX.XX/Y, got ${this}")

@@ -1,22 +1,33 @@
 package network.packet
 
+import utils.pow
+import utils.toCanonicalIpv6
+import java.math.BigInteger
+import java.net.InetAddress
+
 class IPV6: IP {
     lateinit var address: String
     var mask: UInt = 0u
 
     private val _addressNumeric by lazy {
-        address
-            .split(":")
-            .map{
-                it.toBigInteger()
-            }
-            .reduce{
-                acc, hextet ->
-                (acc shl 16) + hextet
-            }
+        if(address.contains("/")){
+            val splt = address.split("/")
+            address = splt[0]
+            mask = splt[1].toUInt()
+        }
+        val i = InetAddress.getByName(address)
+        val a: ByteArray = i.address
+        BigInteger(1, a)
+    }
+    private val _maskNumeric by lazy {
+        (2.toBigInteger().pow(mask.toInt()) - 1.toBigInteger() shl (128 - mask.toInt() - 1))
+    }
+
+    private val prefixNumeric by lazy{
+        _maskNumeric and _addressNumeric
     }
     override fun subnet(): String {
-        TODO("Impelement IPV6")
+        return prefixNumeric.toCanonicalIpv6()
     }
     override fun validate(): Boolean{
         return address.isNotBlank()
