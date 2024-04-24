@@ -1,14 +1,16 @@
 package network.frame
 
 import annotations.Encapsulation
+import delegates.once
 import enums.EtherTypes
 import network.encap.L2
 import printable.Printable
+import kotlin.properties.Delegates
 
 @Encapsulation
 class Frame: Printable {
-    lateinit var srcMac: String
-    lateinit var dstMac: String
+    var srcMac: String by Delegates.once()
+    var dstMac: String by Delegates.once()
     private var preambleAndSfd: Byte = 85
     var data: L2? = null
     private var etherType: EtherTypes = EtherTypes.IPv4

@@ -1,9 +1,7 @@
+import enums.Tos
+import enums.plus
 import exepctions.InvalidIPFormatException
-import network.frame.frame
-import network.packet.ipv4
-import network.packet.ipv6
 import network.packet.packet
-import utils.toIPv6
 import utils.toIpV4
 
 fun main(){
@@ -35,12 +33,15 @@ fun main(){
         val pack = packet {
             srcIp = "192.168.42.13/24".toIpV4()
             dstIp = "127.0.0.1/16".toIpV4()
+            tos = Tos.HIGH_PRECEDENCE + Tos.LOWCOST
+            ttl = 128u
         }
-        println("2001:db8:acad::1/64".toIPv6().subnet())
-        println(pack.srcIp.subnet())
+        println(pack.print())
     } catch(e: IllegalArgumentException){
         println(e.message)
     } catch (e: InvalidIPFormatException){
+        println(e.message)
+    } catch (e: IllegalStateException){
         println(e.message)
     }
 }

@@ -1,6 +1,5 @@
 package network.packet
 
-import utils.pow
 import utils.toCanonicalIpv6
 import java.math.BigInteger
 import java.net.InetAddress
