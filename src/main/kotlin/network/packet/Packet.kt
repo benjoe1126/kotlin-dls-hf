@@ -7,11 +7,16 @@ import network.encap.L2
 import network.encap.L3
 import printable.Printable
 import kotlin.properties.Delegates
+import kotlin.random.Random
 
 @Encapsulation
 class Packet: L2, Printable {
     var srcIp: IP by Delegates.once()
     var dstIp: IP by Delegates.once()
+    val identification: UInt by lazy{
+        val bytes = Random.nextBytes(2)
+        (bytes[0].toUInt() shl 8) + bytes[1].toUInt()
+    }
     var segment: L3? = null
     var ttl: UByte = 255u
     var tos: Byte = 0x00
@@ -46,7 +51,7 @@ class Packet: L2, Printable {
             is IPV4 -> "IP packet\n" + """
             ---------------------------------------------------
             | $version | 32 | $tos | Packet Length  
-            | Identification |   | DF | MF | Fragment Offset  
+            | $identification |   | DF | MF | Fragment Offset  
             | $ttl  |  Transport | $checksum 
             | ${src.address} 
             | ${(dst as IPV4).address} 
