@@ -1,0 +1,4 @@
+package exepctions
+
+class InvalidArpPacketException {
+}
