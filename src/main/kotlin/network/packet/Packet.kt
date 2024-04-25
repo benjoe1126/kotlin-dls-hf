@@ -6,6 +6,7 @@ import enums.EtherTypes
 import network.encap.L2
 import network.encap.L3
 import printable.Printable
+import utils.addVerticalBar
 import kotlin.properties.Delegates
 import kotlin.random.Random
 
@@ -70,18 +71,4 @@ fun packet(init: Packet.() -> Unit): Packet {
     packet.init()
     if(!packet.checkIpMatching()) throw IllegalStateException("Src and dst ip addresses must be of same address family")
     return packet
-}
-
-fun String.addVerticalBar(): String {
-    val lines = lines()
-    val maxLength = lines.maxByOrNull { it.length }?.length ?: 0
-    val result = lines.mapIndexed{ idx, line ->
-            if(idx == 0 || idx == lines.lastIndex){
-                line
-            } else {
-                val padding = " ".repeat(maxLength - line.length)
-                "$line$padding|"
-            }
-    }
-    return result.joinToString("\n")
 }

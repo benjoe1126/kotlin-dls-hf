@@ -9,19 +9,6 @@ import utils.toIpV4
 
 fun main(){
     try {
-        /*
-        val packet = packet {
-            srcIp = ipv4{
-                address = "127.0.0.1"
-                mask = 24u
-            }
-            dstIp = ipv4 {
-                address = "192.168.0.1"
-                mask = 8u
-            }
-        }
-        */
-
         val fr = frame{
             srcMac = "00:1F:00:00:00:00"
             dstMac = "00:00:00:00:00:00"
