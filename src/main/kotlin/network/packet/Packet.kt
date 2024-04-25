@@ -43,16 +43,17 @@ class Packet: L2, Printable {
         //Because of the validity check both should be of the same address family
         val dst = dstIp
         return when(src) {
-            is IPV4 -> """
+            is IPV4 -> "IP packet\n" + """
             ---------------------------------------------------
-            | $version | 32 | $tos | Packet Length  |
-            | Identification |   | DF | MF | Fragment Offset  |
-            | $ttl  |  Transport | $checksum |
-            | ${src.address} |
-            | ${(dst as IPV4).address} |
-            ---------------------------------------------------|
+            | $version | 32 | $tos | Packet Length  
+            | Identification |   | DF | MF | Fragment Offset  
+            | $ttl  |  Transport | $checksum 
+            | ${src.address} 
+            | ${(dst as IPV4).address} 
+            ---------------------------------------------------
         """
                 .trimIndent()
+                .addVerticalBar()
 
             is IPV6 -> ""
         }
@@ -64,4 +65,18 @@ fun packet(init: Packet.() -> Unit): Packet {
     packet.init()
     if(!packet.checkIpMatching()) throw IllegalStateException("Src and dst ip addresses must be of same address family")
     return packet
+}
+
+fun String.addVerticalBar(): String {
+    val lines = lines()
+    val maxLength = lines.maxByOrNull { it.length }?.length ?: 0
+    val result = lines.mapIndexed{ idx, line ->
+            if(idx == 0 || idx == lines.lastIndex){
+                line
+            } else {
+                val padding = " ".repeat(maxLength - line.length)
+                "$line$padding|"
+            }
+    }
+    return result.joinToString("\n")
 }

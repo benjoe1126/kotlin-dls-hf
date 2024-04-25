@@ -5,6 +5,7 @@ import delegates.once
 import enums.EtherTypes
 import network.encap.L2
 import printable.Printable
+import kotlin.math.absoluteValue
 import kotlin.properties.Delegates
 
 @Encapsulation
@@ -13,25 +14,25 @@ class Frame: Printable {
     var dstMac: String by Delegates.once()
     private var preambleAndSfd: Byte = 85
     var data: L2? = null
-    private var etherType: EtherTypes = EtherTypes.IPv4
-        get(){
-            return field
-        }
-    fun computeEtherType(){
-        etherType = data?.getEtherType()?:EtherTypes.VLAN
+    private val etherType by lazy{
+        data?.getEtherType()?:EtherTypes.VLAN
+    }
+    private val crc by lazy{
+        srcMac.hashCode().absoluteValue.toBigInteger() + dstMac.hashCode().absoluteValue.toBigInteger() + preambleAndSfd.hashCode().absoluteValue.toBigInteger() + data.hashCode().absoluteValue.toBigInteger()
+
     }
     override fun print(): String {
-        return """
-            ---------------------------------------------------------------------------------
-            |  Preamble | SOF delim | ${dstMac} | ${srcMac} | ${data?.getLength()?:0u + 20u}
-            --------------------------------------------------------------------------------- 
-                """.trimIndent()
+        val dat = data
+        return "Ethernet frame\n" + """
+            ------------------------------------------------------------------------
+            |  $preambleAndSfd | ${dstMac} | ${srcMac} | ${data?.getLength()?:0u + 20u} | $etherType | $crc |
+            ------------------------------------------------------------------------
+                """.trimIndent() + "\n" + if(dat != null && dat is Printable) dat.print() else ""
     }
 }
 
 fun frame(init: Frame.() -> Unit): Frame{
     var fr = Frame()
     fr.init()
-    fr.computeEtherType()
     return fr
 }

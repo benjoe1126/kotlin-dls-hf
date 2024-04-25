@@ -20,7 +20,7 @@ fun String.toIPv6(): IPV6{
         mask = msk
     }
     if(!ret.validate()){
-        throw InvalidIPFormatException("Invalid ipv6 format, got ${this}")
+        throw InvalidIPFormatException("Invalid ipv6 format, got $this")
     }
     return ret
 }
