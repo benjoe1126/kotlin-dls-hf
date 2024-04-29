@@ -1,4 +1,4 @@
-package network.packet
+package network.ip
 
 import utils.toCanonicalIpv6
 import java.math.BigInteger
@@ -36,8 +36,10 @@ class IPV6: IP {
                     )
                 )
     }
+
+    override fun addressString() = address
 }
-fun ipv6(init: IPV6.() -> Unit): IPV6{
+fun ipv6(init: IPV6.() -> Unit): IPV6 {
     val ret = IPV6()
     ret.init()
     return ret

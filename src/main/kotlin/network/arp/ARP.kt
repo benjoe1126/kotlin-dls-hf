@@ -6,9 +6,7 @@ import enums.ArpOperation
 import enums.EtherTypes
 import exepctions.InvalidArpPacketException
 import network.encap.L2
-import network.packet.IP
-import network.packet.IPV4
-import network.packet.IPV6
+import network.ip.IPV4
 import printable.Printable
 import utils.addVerticalBar
 import utils.validMacAddress

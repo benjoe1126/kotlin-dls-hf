@@ -1,8 +1,8 @@
 package utils
 
 import exepctions.InvalidIPFormatException
-import network.packet.IPV4
-import network.packet.ipv4
+import network.ip.IPV4
+import network.ip.ipv4
 
 fun String.toIpV4(): IPV4 {
     if (this.isEmpty()) {

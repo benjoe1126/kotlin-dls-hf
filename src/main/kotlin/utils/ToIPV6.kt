@@ -1,10 +1,10 @@
 package utils
 
 import exepctions.InvalidIPFormatException
-import network.packet.IPV6
-import network.packet.ipv6
+import network.ip.IPV6
+import network.ip.ipv6
 
-fun String.toIPv6(): IPV6{
+fun String.toIPv6(): IPV6 {
     if(isBlank()) {
         throw InvalidIPFormatException("Invalid ipv6 format")
     }

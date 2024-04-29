@@ -1,4 +1,4 @@
-package network.packet
+package network.ip
 
 import utils.pow
 import utils.toDottedDecimal
@@ -25,13 +25,14 @@ class IPV4: IP {
         return prefixNumeric.toDottedDecimal()
     }
 
+    override fun addressString() = address
     override fun validate(): Boolean {
         return address.matches(Regex("^((25[0-5]|(2[0-4]|1\\d|[1-9]|)\\d)\\.?\\b){4}\$")) &&
                 mask >= 0u && mask <= 32u
     }
 }
 
-fun ipv4(init: IPV4.() -> Unit): IPV4{
+fun ipv4(init: IPV4.() -> Unit): IPV4 {
     val ipaddr = IPV4()
     ipaddr.init()
     if(!ipaddr.validate()){
