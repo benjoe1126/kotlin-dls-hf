@@ -2,7 +2,6 @@ package network.segment
 
 import annotations.Encapsulation
 import network.message.Message
-import network.packet.Packet
 
 @Encapsulation
 open abstract class Segment() {
