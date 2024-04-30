@@ -10,10 +10,8 @@ import kotlin.properties.Delegates
 
 @Encapsulation
 abstract class Packet: L2, Printable {
-    var srcIp: IP by Delegates.once()
-    var dstIp: IP by Delegates.once()
     var ttl:UByte = 255u
     var segment: L3? = null
     abstract val version: Int
-    abstract fun validateIp(): Boolean
+    var tos: Byte = 0x00
 }
