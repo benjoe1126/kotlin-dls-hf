@@ -26,7 +26,7 @@ class TCP: Segment(), L3 {
             | $checkSum
             ---------------------------------------
         """.trimIndent()
-            .addVerticalBar() + if((msg != null) && (msg is Printable)) msg.print() else ""
+            .addVerticalBar() + "\n" + if((msg != null) && (msg is Printable)) msg.print() else ""
     }
 
     override fun validate(): Boolean {

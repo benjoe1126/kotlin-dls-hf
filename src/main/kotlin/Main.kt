@@ -1,11 +1,19 @@
+import enums.DNSFlags
+import enums.HTTPStatusCode
+import enums.HTTPVersion
 import exepctions.InvalidIPFormatException
 import exepctions.InvalidMacAddressException
 import network.frame.frame
+import network.message.dns
+import network.message.http
 import network.packet.packetv4
 import network.packet.packetv6
 import network.segment.tcp
 import network.segment.udp
 import utils.toIpV4
+import java.math.BigInteger
+import java.time.LocalDateTime
+import java.util.Date
 
 fun main(){
     try {
@@ -22,6 +30,16 @@ fun main(){
                     ackNumber = 6822u
                     sequenceNumber = 6900u
                     windowSize = 1000u
+                    data = dns{
+                        opcode = 2323u
+                        rcode = 233u
+                        flag = DNSFlags.AA
+                        ANCOUNT = 4.toBigInteger()
+                        QDCOUNT = 25.toBigInteger()
+                        NSCOUNT = 2131224.toBigInteger()
+                        ARCOUNT = 1_000_000_000.toBigInteger()
+
+                    }
                 }
             }
         }
